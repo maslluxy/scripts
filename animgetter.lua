@@ -12,7 +12,7 @@ gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0.4, 0, 0.2, 0)
+frame.Size = UDim2.new(0.32, 0, 0.3, 0)
 frame.Position = UDim2.new(0.5, 0, 0.5, 0)
 frame.AnchorPoint = Vector2.new(0.5, 0.5)
 frame.BackgroundColor3 = Color3.fromRGB(15, 15, 35)
@@ -76,8 +76,8 @@ closeBtn.TextScaled = true
 closeBtn.Parent = titleBar
 
 local showBtn = Instance.new("ImageButton")
-showBtn.Size = UDim2.new(0, 50, 0, 50)
-showBtn.Position = UDim2.new(0, 0, 0.5, -25)
+showBtn.Size = UDim2.new(0, 30, 0, 30)
+showBtn.Position = UDim2.new(0, -5, 0.5, -15)
 showBtn.AnchorPoint = Vector2.new(0, 0.5)
 showBtn.Image = "rbxassetid://153287168"
 showBtn.BackgroundTransparency = 1
@@ -99,8 +99,8 @@ closeBtn.MouseButton1Click:Connect(function()
 end)
 
 local viewport = Instance.new("ViewportFrame")
-viewport.Size = UDim2.new(0.25, 0, 0.7, 0)
-viewport.Position = UDim2.new(0.025, 0, 0.25, 0)
+viewport.Size = UDim2.new(0.3, 0, 0.6, 0)
+viewport.Position = UDim2.new(0.02, 0, 0.3, 0)
 viewport.BackgroundColor3 = Color3.fromRGB(20, 20, 40)
 viewport.BorderSizePixel = 0
 viewport.Parent = frame
@@ -110,8 +110,8 @@ cam.Parent = viewport
 viewport.CurrentCamera = cam
 
 local subtitle = Instance.new("TextLabel")
-subtitle.Size = UDim2.new(0.7, -20, 0.1, 0)
-subtitle.Position = UDim2.new(0.3, 10, 0.2, 0)
+subtitle.Size = UDim2.new(0.65, -20, 0.1, 0)
+subtitle.Position = UDim2.new(0.35, 10, 0.2, 0)
 subtitle.BackgroundTransparency = 1
 subtitle.Text = "placeholder text for future"
 subtitle.Font = Enum.Font.Arcade
@@ -120,8 +120,8 @@ subtitle.TextColor3 = Color3.fromRGB(200, 200, 255)
 subtitle.Parent = frame
 
 local outputLabel = Instance.new("TextLabel")
-outputLabel.Size = UDim2.new(0.65, 0, 0.15, 0)
-outputLabel.Position = UDim2.new(0.3, 10, 0.35, 0)
+outputLabel.Size = UDim2.new(0.6, 0, 0.15, 0)
+outputLabel.Position = UDim2.new(0.35, 10, 0.35, 0)
 outputLabel.BackgroundColor3 = Color3.fromRGB(35, 35, 60)
 outputLabel.TextColor3 = Color3.fromRGB(160, 160, 160)
 outputLabel.Text = "Please press \"Get\" to get started..."
@@ -136,7 +136,7 @@ labelCorner.Parent = outputLabel
 
 local copyBtn = Instance.new("TextButton")
 copyBtn.Size = UDim2.new(0.25, 0, 0.15, 0)
-copyBtn.Position = UDim2.new(0.7, 0, 0.55, 0)
+copyBtn.Position = UDim2.new(0.72, 0, 0.55, 0)
 copyBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 130)
 copyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 copyBtn.Font = Enum.Font.Arcade
@@ -150,7 +150,7 @@ copyCorner.Parent = copyBtn
 
 local getBtn = Instance.new("TextButton")
 getBtn.Size = UDim2.new(0.35, 0, 0.2, 0)
-getBtn.Position = UDim2.new(0.3, 0, 0.55, 0)
+getBtn.Position = UDim2.new(0.35, 0, 0.55, 0)
 getBtn.BackgroundColor3 = Color3.fromRGB(50, 100, 200)
 getBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 getBtn.Font = Enum.Font.Arcade
@@ -166,6 +166,14 @@ local canCheck = true
 local placeholder = "Please press \"Get\" to get started..."
 local animClone, animTrack
 
+local function getRigType()
+	if humanoid.RigType == Enum.HumanoidRigType.R15 then
+		return game:GetService("InsertService"):LoadAsset(16688968):FindFirstChildWhichIsA("Model") -- Sample R15 dummy
+	else
+		return game:GetService("InsertService"):LoadAsset(424106429):FindFirstChildWhichIsA("Model") -- Sample R6 dummy
+	end
+end
+
 getBtn.MouseButton1Click:Connect(function()
 	if not canCheck then return end
 	local tracks = humanoid:GetPlayingAnimationTracks()
@@ -175,8 +183,9 @@ getBtn.MouseButton1Click:Connect(function()
 			outputLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 			if animClone then animClone:Destroy() end
 
-			animClone = char:Clone()
-			animClone:FindFirstChild("HumanoidRootPart").Anchored = true
+			animClone = getRigType()
+			local hrp = animClone:FindFirstChild("HumanoidRootPart")
+			if hrp then hrp.Anchored = true end
 			for _, obj in ipairs(animClone:GetDescendants()) do
 				if obj:IsA("Script") or obj:IsA("LocalScript") then obj:Destroy() end
 			end
